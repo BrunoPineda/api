@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Buscar RUC</title>
+  <!-- Agrega la librería de Bootstrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container mt-4">
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <form id="searchForm">
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Ingresa el RUC" id="rucInput">
+            <div class="input-group-append">
+              <button class="btn btn-primary" type="submit">Buscar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Envuelve todo el código en una función async
+    async function fetchData(ruc) {
+      const url = 'http://167.114.113.144/buscador/Mostrar-informacion';
+
+      const data = {
+        dni: ruc
+      };
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const text = await response.text();
+
+      return text;
+    }
+
+    // Escucha el evento de envío del formulario
+    document.getElementById('searchForm').addEventListener('submit', async function (event) {
+      event.preventDefault();
+
+      const rucInput = document.getElementById('rucInput');
+      const ruc = rucInput.value;
+      console.log(ruc);
+      // Realiza la solicitud a la API y espera la respuesta
+      try {
+        const responseText = await fetchData(ruc);
+
+        // Muestra la respuesta en la consola
+        console.log(responseText);
+      } catch (error) {
+        console.error('Error al realizar la solicitud:', error);
+      }
+    });
+  </script>
+</body>
+</html>
